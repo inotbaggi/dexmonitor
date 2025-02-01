@@ -1,6 +1,6 @@
-package me.baggi.fpi.util
+package me.baggi.dex.util
 
-import me.baggi.fpi.model.DEXResponse
+import me.baggi.dex.model.DEXResponse
 
 fun tokenInfoMessage(dexResponse: DEXResponse): String = """
 📊 *${dexResponse.baseToken.name}*  

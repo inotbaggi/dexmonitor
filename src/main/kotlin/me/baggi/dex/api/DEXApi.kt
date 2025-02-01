@@ -1,10 +1,9 @@
-package me.baggi.fpi.api
+package me.baggi.dex.api
 
 import com.squareup.okhttp.OkHttpClient
 import com.squareup.okhttp.Request
-import kotlinx.serialization.json.Json
-import me.baggi.fpi.App.json
-import me.baggi.fpi.model.DEXResponse
+import me.baggi.dex.App.json
+import me.baggi.dex.model.DEXResponse
 
 object DEXApi {
     private val client = OkHttpClient()

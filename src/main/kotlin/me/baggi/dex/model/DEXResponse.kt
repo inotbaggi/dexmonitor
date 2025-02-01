@@ -1,4 +1,4 @@
-package me.baggi.fpi.model
+package me.baggi.dex.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

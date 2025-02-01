@@ -1,4 +1,4 @@
-package me.baggi.fpi.util
+package me.baggi.dex.util
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope

@@ -1,4 +1,4 @@
-package me.baggi.fpi.controller
+package me.baggi.dex.controller
 
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.annotations.CommandHandler
@@ -8,8 +8,8 @@ import eu.vendeli.tgbot.types.ParseMode
 import eu.vendeli.tgbot.types.User
 import eu.vendeli.tgbot.types.internal.MessageUpdate
 import eu.vendeli.tgbot.types.internal.UpdateType
-import me.baggi.fpi.App
-import me.baggi.fpi.util.tokenInfoMessage
+import me.baggi.dex.App
+import me.baggi.dex.util.tokenInfoMessage
 
 object Handler {
     @UpdateHandler([UpdateType.MESSAGE])

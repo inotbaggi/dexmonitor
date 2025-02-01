@@ -1,4 +1,4 @@
-package me.baggi.fpi
+package me.baggi.dex
 
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.api.message.message
@@ -6,9 +6,9 @@ import eu.vendeli.tgbot.types.ParseMode
 import eu.vendeli.tgbot.types.internal.LogLvl
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
-import me.baggi.fpi.api.DEXApi
-import me.baggi.fpi.model.DEXResponse
-import me.baggi.fpi.util.*
+import me.baggi.dex.api.DEXApi
+import me.baggi.dex.model.DEXResponse
+import me.baggi.dex.util.*
 import java.time.Duration
 import kotlin.system.exitProcess
 
@@ -37,9 +37,59 @@ object App {
             Duration.ofSeconds(30),
         ) {
             try {
-                refreshAndCheckToken()
+                actualTokenInfo = DEXApi.getTokenInfo(CHAIN, TOKEN)[0]
             } catch (e: Exception) {
                 e.printStackTrace()
+            }
+        }
+
+        KorosTimerTask.start(
+            "hot_notifications",
+            Duration.ofSeconds(0),
+            Duration.ofMinutes(5)
+        ) {
+            val priceChange6h = actualTokenInfo.priceChange["h6"] ?: 0.0
+            val priceChange5m = actualTokenInfo.priceChange["m5"] ?: 0.0
+            val transactions5m = actualTokenInfo.countTransactions["m5"]
+
+            if (priceChange6h >= 2.0 || priceChange6h <= -2.0) {
+                message(
+                    priceChanged(priceChange6h, actualTokenInfo.priceUsd, actualTokenInfo.marketCap)
+                ).options {
+                    parseMode = ParseMode.Markdown
+                }.send(BOT_OWNER_ID, bot)
+            }
+
+            if (priceChange5m >= 5.0) {
+                message(
+                    priceSurge(priceChange5m, actualTokenInfo.priceUsd)
+                ).options {
+                    parseMode = ParseMode.Markdown
+                }.send(BOT_OWNER_ID, bot)
+            }
+
+            if (priceChange5m <= -5.0) {
+                message(
+                    priceDrop(priceChange5m, actualTokenInfo.priceUsd)
+                ).options {
+                    parseMode = ParseMode.Markdown
+                }.send(BOT_OWNER_ID, bot)
+            }
+
+            if (transactions5m != null && transactions5m.sells > transactions5m.buys * 2) {
+                message(
+                    highSellVolume(transactions5m.buys, transactions5m.sells)
+                ).options {
+                    parseMode = ParseMode.Markdown
+                }.send(BOT_OWNER_ID, bot)
+            }
+
+            if ((actualTokenInfo.volume["h1"] ?: 0.0) > 50_000.0) {
+                message(
+                    highTradeVolume(actualTokenInfo.volume["h1"]!!)
+                ).options {
+                    parseMode = ParseMode.Markdown
+                }.send(BOT_OWNER_ID, bot)
             }
         }
 
@@ -55,54 +105,6 @@ object App {
 
         runBlocking {
             bot.handleUpdates()
-        }
-    }
-
-    private suspend fun refreshAndCheckToken() {
-        actualTokenInfo = DEXApi.getTokenInfo(CHAIN, TOKEN)[0]
-
-        val priceChange6h = actualTokenInfo.priceChange["h6"] ?: 0.0
-        val priceChange5m = actualTokenInfo.priceChange["m5"] ?: 0.0
-        val transactions5m = actualTokenInfo.countTransactions["m5"]
-
-        if (priceChange6h >= 2.0 || priceChange6h <= -2.0) {
-            message(
-                priceChanged(priceChange6h, actualTokenInfo.priceUsd, actualTokenInfo.marketCap)
-            ).options {
-                parseMode = ParseMode.Markdown
-            }.send(BOT_OWNER_ID, bot)
-        }
-
-        if (priceChange5m >= 5.0) {
-            message(
-                priceSurge(priceChange5m, actualTokenInfo.priceUsd)
-            ).options {
-                parseMode = ParseMode.Markdown
-            }.send(BOT_OWNER_ID, bot)
-        }
-
-        if (priceChange5m <= -5.0) {
-            message(
-                priceDrop(priceChange5m, actualTokenInfo.priceUsd)
-            ).options {
-                parseMode = ParseMode.Markdown
-            }.send(BOT_OWNER_ID, bot)
-        }
-
-        if (transactions5m != null && transactions5m.sells > transactions5m.buys * 2) {
-            message(
-                highSellVolume(transactions5m.buys, transactions5m.sells)
-            ).options {
-                parseMode = ParseMode.Markdown
-            }.send(BOT_OWNER_ID, bot)
-        }
-
-        if (actualTokenInfo.volume["h1"] ?: 0.0 > 50_000.0) {
-            message(
-                highTradeVolume(actualTokenInfo.volume["h1"]!!)
-            ).options {
-                parseMode = ParseMode.Markdown
-            }.send(BOT_OWNER_ID, bot)
         }
     }
 }
