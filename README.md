@@ -9,7 +9,7 @@ DexMonitor — это бот для Telegram, который отслежива�
 - Автоматическая отправка статистики раз в час
 
 ## Стэк
-- Kotlin (Serialization/Coroutines
+- Kotlin (Serialization/Coroutines)
 - [Telegram Bot API](https://github.com/vendelieu/telegram-bot)
 - OkHttp
 
