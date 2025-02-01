@@ -4,6 +4,7 @@ plugins {
     kotlin("plugin.serialization") version "2.1.0"
     id("com.google.devtools.ksp") version "2.1.0-1.0.29"
     id("eu.vendeli.telegram-bot") version "7.8.0"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = "me.baggi"
@@ -23,5 +24,5 @@ kotlin {
 }
 
 application {
-    mainClass.set("me.baggi.dex.AppKt")
+    mainClass.set("me.baggi.dex.App")
 }
