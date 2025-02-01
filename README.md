@@ -23,14 +23,13 @@ cd dexmonitor
 ```
 - Сборка
 ```
-gradle build
 gradle shadowJar
 ```
 - Запуск
 
 run.sh (для Linux/macOS)
 ```
-export BOT_TOKEN=your_telegram_bot_token
+export TELEGRAM_BOT_TOKEN=your_telegram_bot_token
 export BOT_OWNER_ID=your_telegram_id
 export CHAIN=your_chain
 export TOKEN=your_token_address
@@ -39,7 +38,7 @@ java -jar build/libs/dexmonitor-1.0-SNAPSHOT-all.jar
 ```
 run.bat (для Windows)
 ```
-SET BOT_TOKEN="your_telegram_bot_token"
+SET TELEGRAM_BOT_TOKEN="your_telegram_bot_token"
 SET BOT_OWNER_ID="your_telegram_id"
 SET CHAIN="your_chain"
 SET TOKEN="your_token_address"
