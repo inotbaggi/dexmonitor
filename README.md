@@ -23,7 +23,6 @@ cd dexmonitor
 ```
 - Сборка
 ```
-gradle build
 gradle shadowJar
 ```
 - Запуск
