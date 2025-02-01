@@ -52,14 +52,6 @@ object App {
             val priceChange5m = actualTokenInfo.priceChange["m5"] ?: 0.0
             val transactions5m = actualTokenInfo.countTransactions["m5"]
 
-            if (priceChange6h >= 2.0 || priceChange6h <= -2.0) {
-                message(
-                    priceChanged(priceChange6h, actualTokenInfo.priceUsd, actualTokenInfo.marketCap)
-                ).options {
-                    parseMode = ParseMode.Markdown
-                }.send(BOT_OWNER_ID, bot)
-            }
-
             if (priceChange5m >= 5.0) {
                 message(
                     priceSurge(priceChange5m, actualTokenInfo.priceUsd)
